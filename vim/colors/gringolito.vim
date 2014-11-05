@@ -37,7 +37,7 @@ hi SignColum    guifg=#75715E guibg=#3E3D32 gui=none
 hi IncSearch    guifg=bg guibg=#E6DB74 gui=none
 hi LineNr       guifg=#75715E guibg=#3E3D32 gui=none
 hi MatchParen   guifg=#56C9FF guibg=bg gui=bold,italic
-hi ModeMsg      gui=none
+hi ModeMsg      guifg=#FD971F gui=none
 hi MoreMsg      guifg=#66D9EF gui=none
 hi NonText      guifg=#3B3A32 gui=none
 hi Pmenu        guifg=fg guibg=#3E3D32
@@ -53,6 +53,7 @@ hi SpellCap     guisp=#65D9EF
 hi SpellRare    guisp=#AE81FF
 hi StatusLine   guifg=fg guibg=#3E3D32 gui=none
 hi StatusLineNC guifg=#75715E guibg=#3E3D32 gui=none
+hi String       guifg=#75715E guibg=#3E3D32 gui=none
 hi TabLine      guifg=#75715E guibg=#3E3D32 gui=none
 hi TabLineFill  guifg=fg guibg=#3E3D32 gui=none
 hi TabLineSel   guifg=fg guibg=#3E3D32 gui=none

@@ -46,6 +46,10 @@
 'snippets'	snipMate.txt	/*'snippets'*
 .snippet	snipMate.txt	/*.snippet*
 .snippets	snipMate.txt	/*.snippets*
+:CS	cecscope.txt	/*:CS*
+:CSH	cecscope.txt	/*:CSH*
+:CSL	cecscope.txt	/*:CSL*
+:CSS	cecscope.txt	/*:CSS*
 :CVSEdit	vcscommand.txt	/*:CVSEdit*
 :CVSEditors	vcscommand.txt	/*:CVSEditors*
 :CVSUnedit	vcscommand.txt	/*:CVSUnedit*
@@ -189,6 +193,13 @@ b:VCSCommandCommand	vcscommand.txt	/*b:VCSCommandCommand*
 b:VCSCommandOriginalBuffer	vcscommand.txt	/*b:VCSCommandOriginalBuffer*
 b:VCSCommandSourceFile	vcscommand.txt	/*b:VCSCommandSourceFile*
 b:VCSCommandVCSType	vcscommand.txt	/*b:VCSCommandVCSType*
+cecscope-contents	cecscope.txt	/*cecscope-contents*
+cecscope-copyright	cecscope.txt	/*cecscope-copyright*
+cecscope-history	cecscope.txt	/*cecscope-history*
+cecscope-install	cecscope.txt	/*cecscope-install*
+cecscope-manual	cecscope.txt	/*cecscope-manual*
+cecscope-tutorial	cecscope.txt	/*cecscope-tutorial*
+cecscope.txt	cecscope.txt	/*cecscope.txt*
 clang_close-preview	clang_complete.txt	/*clang_close-preview*
 clang_complete	clang_complete.txt	/*clang_complete*
 clang_complete-author	clang_complete.txt	/*clang_complete-author*
@@ -240,6 +251,7 @@ g:SuperTabMappingForward	supertab.txt	/*g:SuperTabMappingForward*
 g:SuperTabMappingTabLiteral	supertab.txt	/*g:SuperTabMappingTabLiteral*
 g:SuperTabMidWordCompletion	supertab.txt	/*g:SuperTabMidWordCompletion*
 g:SuperTabRetainCompletionDuration	supertab.txt	/*g:SuperTabRetainCompletionDuration*
+g:cecscope_dboptions	cecscope.txt	/*g:cecscope_dboptions*
 g:clang_auto_select	clang_complete.txt	/*g:clang_auto_select*
 g:clang_auto_user_options	clang_complete.txt	/*g:clang_auto_user_options*
 g:clang_close_preview	clang_complete.txt	/*g:clang_close_preview*
