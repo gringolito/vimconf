@@ -82,8 +82,8 @@ map <F7> :s/^\/\///g<CR>:nohlsearch<CR>
 map s bve
 map <C-g> :tn<CR>
 map <C-h> :tN<CR>
-map <C-f> :cs find f
-map <C-e> :cs find e
+map <C-f> :cs find f 
+map <C-e> :cs find e 
 map <C-k> :make
 map <C-Down> :cn<CR>
 map <C-Up> :cN<CR>
@@ -138,11 +138,13 @@ endfunction
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 
 " Removes superfluous white space from the end of a line
-function! RemoveWhiteSpace()
-    :%s/\s*$//g
-    :'^
-    "`.
-endfunction
+"function! RemoveWhiteSpace()
+"    :%s/\s*$//g
+"    :'^
+"    "`.
+"endfunction
 
 " before writing to any file, this function call will remove any extra white space at the end of a line
-au! BufWrite,FileWritePre * call RemoveWhiteSpace()
+"au! BufWrite,FileWritePre * call RemoveWhiteSpace()
+
+command W w !sudo tee %
