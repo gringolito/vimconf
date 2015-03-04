@@ -3,9 +3,15 @@ CURDIR=`pwd`
 
 # create backups, for blind sighted users that doesnt even look what
 # scripts does
-mv -f ~/.vimrc ~/.vimrc.bk
-mv -f ~/.gvimrc ~/.gvimrc.bk
-mv -f ~/.vim ~/.vim.bk
+if [ -f ~/.vimrc ]; then
+	mv -f ~/.vimrc ~/.vimrc.bk
+fi
+if [ -f ~/.gvimrc ]; then
+	mv -f ~/.gvimrc ~/.gvimrc.bk
+fi
+if [ -d ~/.vim ]; then
+	mv -f ~/.vim ~/.vim.bk
+fi
 
 # create simlinks for the current dir, so our configuration is updated
 # if its modified in the git repository
