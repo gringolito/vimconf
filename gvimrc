@@ -26,7 +26,7 @@ function! BC_AddChar(schar)
   endif
 endfunction
 
-winsize 90 50
+winsize 88 50
 set guioptions-=l
 set guioptions-=L
 set guioptions-=T

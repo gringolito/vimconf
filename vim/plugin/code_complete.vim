@@ -252,8 +252,10 @@ let g:template['c']['if'] = "if( ".g:rs."...".g:re." ) {\<cr>\t".g:rs."...".g:re
 let g:template['c']['while'] = "while( ".g:rs."...".g:re." )\<cr>{\<cr>".g:rs."...".g:re."\<cr>}"
 let g:template['c']['ife'] = "if( ".g:rs."...".g:re." )\<cr>{\<cr>".g:rs."...".g:re."\<cr>} else\<cr>{\<cr>".g:rs."...".
             \g:re."\<cr>}"
-let g:template['c']['log'] = "syslog(0, \"futzig (%s:%d) %s\", __FILE__, __LINE__, __func__);"
-let g:template['c']['syslog'] = "syslog(0, \"futzig (%s:%d) %s\", __FILE__, __LINE__, __func__);"
+let g:template['c']['log'] = "syslog(0, \"futzig (%s:%d) %s()\", __FILE__, __LINE__, __func__);"
+let g:template['c']['syslog'] = "syslog(0, \"futzig (%s:%d) %s()\", __FILE__, __LINE__, __func__);"
+let g:template['c']['klog'] = "printk(KERN_EMERG \"futzig %s():%d\", __func__, __LINE__);"
+let g:template['c']['err'] = "fprintf(stderr, \"futzig (%s:%d) %s\", __FILE__, __LINE__, __func__);"
 
 " ---------------------------------------------
 " C++ templates
