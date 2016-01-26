@@ -8,7 +8,7 @@ endif
 
 highlight clear
 colorscheme gringolito
-set cc=80                " ruler
+set cc=100                " ruler
 
 " script que fecha caracteres '(', '{' e '['
 inoremap ( ()<esc>:call BC_AddChar(")")<cr>i
@@ -26,8 +26,23 @@ function! BC_AddChar(schar)
   endif
 endfunction
 
-winsize 88 50
+winsize 104 50
 set guioptions-=l
 set guioptions-=L
 set guioptions-=T
 
+function! ToggleFlag(option,flag)
+  exec ('let lopt = &' . a:option)
+  if lopt =~ (".*" . a:flag . ".*")
+    exec ('set ' . a:option . '-=' . a:flag)
+  else
+    exec ('set ' . a:option . '+=' . a:flag)
+  endif
+endfunction
+
+function! ToggleFullscreen()
+  exec ToggleFlag("guioptions","m")
+  exec system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
+endfunction
+
+map <silent> <F11> :call ToggleFullscreen()<CR>
