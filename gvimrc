@@ -26,7 +26,7 @@ function! BC_AddChar(schar)
   endif
 endfunction
 
-winsize 104 50
+winsize 104 60
 set guioptions-=l
 set guioptions-=L
 set guioptions-=T
@@ -46,3 +46,24 @@ function! ToggleFullscreen()
 endfunction
 
 map <silent> <F11> :call ToggleFullscreen()<CR>
+
+" Removes superfluous white space from the end of a line
+function! RemoveWhiteSpace()
+    let save_cursor = getpos(".")
+    :%s/\s*$//g
+    :'^
+    "`.
+    call setpos('.', save_cursor)
+endfunction
+
+" before writing to any file, this function call will remove any extra white space at the end of a line
+au! BufWrite,FileWritePre * call RemoveWhiteSpace()
+
+function TrimEndLines()
+    let save_cursor = getpos(".")
+    :silent! %s#\($\n\s*\)\+\%$##
+    call setpos('.', save_cursor)
+endfunction
+
+" before writing to any file, this function call will remove any extra white lines end of a file
+au! BufWrite,FileWritePre * call TrimEndLines()

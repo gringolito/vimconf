@@ -30,7 +30,8 @@ set autoindent    " (ai) turn on auto-indenting (great for programers)
 set copyindent    " (ci) when auto-indenting, use the indenting format of the previous line
 set smartindent   " does the right thing (mostly) in programs
 set cindent       " stricter rules for C programs
-set noexpandtab   " why the hell would i want space instead of tabs
+"set noexpandtab   " why the hell would i want space instead of tabs
+set expandtab     " why the hell would i want space instead of tabs, cause my it's not my decision
 set mouse=a
 
 " cool stuff
@@ -77,9 +78,9 @@ au FileType c,h,java,js setlocal mps+==:; " allow the match pairs operation (%) 
 set makeprg=makegvim\ --directory=~/Projects/buildroot
 
 " plugins bindings
-map <F1> :bd<CR><CR>:syntax on<CR>
 " deactivate indentation and other formatting stuff to prevent
 " shit from happening while pasting things
+map <F1> :!cscope -bRkq -I ../../_build/builderenv/dmos-services-l2/dmos-services-l2-test-valgrind/imported/target/include<CR>:!rm -f tags<CR>:!ctags -R --c-kinds=+p --fields=+S .<CR>:cs reset<CR>:TlistUpdate<CR>
 set pastetoggle=<F2>
 map <F3> :!cscope -bRkq<CR>:!rm -f tags<CR>:!ctags -R --c-kinds=+p --fields=+S .<CR>:cs reset<CR>:TlistUpdate<CR>
 map <F4> :TlistToggle<CR>
@@ -94,6 +95,9 @@ map <C-e> :cs find e
 map <C-k> :make
 map <C-Down> :cn<CR>
 map <C-Up> :cN<CR>
+map <C-a> ggVG
+map <C-k> :pyf /usr/share/vim/addons/syntax/clang-format-3.5.py<CR>
+imap <C-k> <c-o>:pyf /usr/share/vim/addons/syntax/clang-format-3.5.py<CR>
 
 " plugin settings
 let g:Tlist_Sort_Type='name'
@@ -147,14 +151,7 @@ endfunction
 
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 
-" Removes superfluous white space from the end of a line
-"function! RemoveWhiteSpace()
-"    :%s/\s*$//g
-"    :'^
-"    "`.
-"endfunction
-
-" before writing to any file, this function call will remove any extra white space at the end of a line
-"au! BufWrite,FileWritePre * call RemoveWhiteSpace()
-
 command W w !sudo tee %
+
+" keep a single clipboard between all vim sessions
+set clipboard=unnamedplus
