@@ -1,69 +1,51 @@
-" local syntax file - set colors on a per-machine basis:
+" vim600: set foldmethod=marker:
+"
+" local syntax file: set colors and useful options
+"
 " Maintainer: Filipe Utzig (filipeutzig@gmail.com)
-" Last Change: 2014, Aug 05.
-
-if exists("syntax_on")
-  syntax reset
-endif
-
-highlight clear
+" Last Change: 2016, Mar 16.
+" License:
+"
+" "THE BEER-WARE LICENSE" (Revision 42):
+" <filipeutzig@gmail.com> wrote this file.  As long as you retain this notice you
+" can do whatever you want with this stuff. If we meet some day, and you think
+" this stuff is worth it, you can buy me a beer in return.   Filipe Utzig
+"
+" Section: Code highlight and colorscheme {{{1
+" Fix syntax highlighting and set a colorscheme
+"if exists("syntax_on")
+"    syntax reset
+"endif
+"highlight clear
 colorscheme gringolito
-set cc=100                " ruler
 
-" script que fecha caracteres '(', '{' e '['
-inoremap ( ()<esc>:call BC_AddChar(")")<cr>i
-inoremap { {}<esc>:call BC_AddChar("}")<cr>i
-inoremap [ []<esc>:call BC_AddChar("]")<cr>i
-inoremap \" \""<esc>:call BC_AddChar("\"")<cr>i
-
-"inoremap <C-j> <esc>:call search(BC_GetChar(), "W")<cr>a
-
-function! BC_AddChar(schar)
-  if exists("b:robstack")
-    let b:robstack = b:robstack . a:schar
-  else
-    let b:robstack = a:schar
-  endif
-endfunction
-
+" Section: GUI Options {{{1
+" Set window size of GVim when opening a new window
 winsize 104 60
+
+" Remove GUI left scrollbar
 set guioptions-=l
 set guioptions-=L
+
+" Remove GUI toolbar
 set guioptions-=T
 
+" Section: Fullscreen support {{{1
+" Adds fullscreen support for GVim (mapped in F11)
+" This script needs wmctrl to work properly (apt-get install wmctrl)
 function! ToggleFlag(option,flag)
-  exec ('let lopt = &' . a:option)
-  if lopt =~ (".*" . a:flag . ".*")
-    exec ('set ' . a:option . '-=' . a:flag)
-  else
-    exec ('set ' . a:option . '+=' . a:flag)
-  endif
+    exec('let lopt = &' . a:option)
+    if lopt =~ (".*" . a:flag . ".*")
+        exec('set ' . a:option . '-=' . a:flag)
+    else
+        exec('set ' . a:option . '+=' . a:flag)
+    endif
 endfunction
 
 function! ToggleFullscreen()
-  exec ToggleFlag("guioptions","m")
-  exec system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
+    exec ToggleFlag("guioptions","m")
+    exec system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
 endfunction
 
 map <silent> <F11> :call ToggleFullscreen()<CR>
 
-" Removes superfluous white space from the end of a line
-function! RemoveWhiteSpace()
-    let save_cursor = getpos(".")
-    :%s/\s*$//g
-    :'^
-    "`.
-    call setpos('.', save_cursor)
-endfunction
-
-" before writing to any file, this function call will remove any extra white space at the end of a line
-au! BufWrite,FileWritePre * call RemoveWhiteSpace()
-
-function TrimEndLines()
-    let save_cursor = getpos(".")
-    :silent! %s#\($\n\s*\)\+\%$##
-    call setpos('.', save_cursor)
-endfunction
-
-" before writing to any file, this function call will remove any extra white lines end of a file
-au! BufWrite,FileWritePre * call TrimEndLines()

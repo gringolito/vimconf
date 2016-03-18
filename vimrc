@@ -1,105 +1,178 @@
-" Rafael Zalamena <rzalamena@gmail.com> - vim configuration
-" Custom settings
-set nocompatible
-set backspace=indent,eol,start
+" vim600: set foldmethod=marker:
+"
+" Vim configuration
+"
+" Original Author: Rafael Zalamena <rzalamena@gmail.com>
+" Maintainer: Filipe Utzig <filipeutzig@gmail.com>
+" Last Change: 2016, Mar 17.
+" License:
+"
+" "THE BEER-WARE LICENSE" (Revision 42):
+" <filipeutzig@gmail.com> wrote this file.  As long as you retain this notice you
+" can do whatever you want with this stuff. If we meet some day, and you think
+" this stuff is worth it, you can buy me a beer in return.   Filipe Utzig
+"
+" Section: Custom settings {{{1
+set nocompatible        " Became not compatible with Vi, required for the most of this vimrc
+set mouse=a             " Enable mouse use in: normal, visual, insert and command-line modes
+set title               " Change the window title to 'filename [++-] (path) - VIM'
+set ruler               " Display the cursos current position
+set history=5000        " Configure command history size
+set hidden              " Don't unload buffer on window close
+"set nohidden           " Unload buffer when window close, save a bit of memory, but is slower
+set splitright          " When spliting panel, the new one will be in right side
+set clipboard=unnamed   " Keep a single clipboard between all your vim sessions
+filetype on             " Enable filetype detection
+filetype plugin on      " Enable dynamic plugin loading based on filetype
 
-" enconding stuff
-set termencoding=utf8
-set encoding=utf8
-try
-	lang en_US
-	catch
-endtry
-
-" spelling stuff
-set nospell
-set spl=en_US
-set ve=block
-
-" misc
-set title
-set ruler " always display the cursos current position
-
-" ident
-set background=dark
-set tags=tags,../tags,../../tags,../../../tags
-set tabstop=4     " (ts) width (in spaces) that a <tab> is displayed as
-set softtabstop=4 " (sts) makes spaces feel like tabs (like deleting)
-set shiftwidth=4  " (sw) width (in spaces) used in each step of autoindent (aswell as << and >>)
-set autoindent    " (ai) turn on auto-indenting (great for programers)
-set copyindent    " (ci) when auto-indenting, use the indenting format of the previous line
-set smartindent   " does the right thing (mostly) in programs
-set cindent       " stricter rules for C programs
-"set noexpandtab   " why the hell would i want space instead of tabs
-set expandtab     " why the hell would i want space instead of tabs, cause my it's not my decision
-set mouse=a
-
-" cool stuff
+" Section: Code highlight and colorscheme {{{2
 if exists("syntax_on")
   syntax reset
 endif
-
+syntax on
 highlight clear
 colorscheme devbox-dark-256
+set background=dark     " Use this if your colorscheme has a dark background
 
-filetype on
-filetype plugin on
-syn on                  " syntax highlight
-set number              " line numbers
-set wmnu                " wild menu - cool stuff
+" Section: Language, spelling and enconding stuff {{{2
+" Set file enconding to UTF-8
+set termencoding=utf8
+set encoding=utf8
+try
+    lang en_US
+    catch
+endtry
+
+"set spell              " Enable spell checking
+set nospell             " Disbale spell checking
+set spelllang=en_US     " Set spell language
+
+" Section: Indentation stuff {{{2
+set tabstop=4           " Width (in spaces) that a <tab> is displayed as
+set softtabstop=4       " Makes spaces feel like tabs (like deleting)
+set shiftwidth=4        " Width (in spaces) used in each step of autoindent (aswell as << and >>)
+set autoindent          " Turn on auto-indenting (great for programers)
+set copyindent          " When auto-indenting, use the indenting format of the previous line
+set smartindent         " Does the right thing (mostly) in programs
+set cindent             " Stricter rules for C programs
+"set noexpandtab        " Why the hell would I want space instead of tabs
+set expandtab           " If you need to use spaces instead tabs
+
+" Section: Cool stuff {{{1
+" Enable block editing support (type Ctrl+V in normal-mode to start block selection)
+set virtualedit=block
+
+" Fix backspace to work over line breaks, automatically-inserted indentation, or the place
+" where insert mode started
+set backspace=indent,eol,start
+
+set number              " Show line numbers on left
+set cursorline          " Highlight current line
+"set nocursorline       " Disable current line highlighting
+set colorcolumn=100     " Set horizontal ruler indicator size (in columns)
+"set textwidth=100      " Automatic broke line after size (in columns)
+set list                " Show hidden characters like tabs and lost spaces
+set listchars=tab:▸\    " Whats gonna be shown instead of TABs
+set listchars+=trail:·  " Whats gonna be shown instead of trailling spaces
+set wildmenu            " Improved command-line completion
+"set nowildmenu         " Disables improved command-line completion
+
+" Complete till longest common string and show a list of possible completions
 set wildmode=longest,list:full
-set hi=5000             " hostory size
-set hidden              " dont unload buffer on window close
-set encoding=utf-8
-set list                " show hidden characters like tabs and lost spaces
-set listchars=tab:▸\    " whats gonna be shown instead of those specified stuff
-set listchars+=trail:·  " whats gonna be shown instead of those specified stuff
-set completeopt=menu,menuone,preview " completion stuff
-set incsearch           " search as im typing - damn good
-set ignorecase          " ignore case
-set showfulltag         " C stuff
-set hlsearch            " highlight search occurences
-set tabpagemax=100      " max tabs
-set cursorline          " highlight cursor line
-set splitright          " split panel in right side
-" tricky stuff to put pointer the last place you were when you closed the file
+
+" Adds a close section of the following characters: '(', '{', '[' and '"'
+inoremap ( ()<LEFT>
+inoremap { {}<LEFT>
+inoremap [ []<LEFT>
+inoremap " ""<LEFT>
+
+" Good tab completion - press <TAB> to autocomplete if there's a character previously
+set completeopt=menu,menuone,preview
+function InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+
+inoremap <TAB> <C-r>=InsertTabWrapper()<CR>
+
+" Use :W (uppercase W) to save your files with 'sudo', usefull when you forget to open Vim
+" with sudo to edit system files
+command W w !sudo tee %
+
+" Allow the match pairs operation (%) to work with '=' and ';' too (default is '(:),{:},[:]')
+autocmd FileType c,cpp,h,java,js setlocal matchpairs+==:;
+
+" Tricky stuff to put pointer the last place you were when you closed the file
 set viminfo='100,\"1000,:40,%,n~/.viminfo
-au BufReadPost * if line("'\"")|execute("normal `\"")|endif
+autocmd BufReadPost * if line("'\"")|execute("normal `\"")|endif
 autocmd BufReadPost *
-\ if line("'\"") > 0 && line("'\"") <= line("$") |
-\   exe "normal g`\"" |
-\ endif
+\   if line("'\"") > 0 && line("'\"") <= line("$") |
+\       exe "normal g`\"" |
+\   endif
 
-" file specific
-"set tw=72
-au FileType Mail set fo=ctq tw=72 et      " respect the netiquette while mailing
-au FileType c,h,java,js setlocal mps+==:; " allow the match pairs operation (%) to work with '=' and ';'
+" Section: Searching {{{2
+set incsearch           " Search as I'm typing, like google - damn good
+set ignorecase          " Case insensitive searching
+"set noignorecase       " Case sensitive searching
+set hlsearch            " Highlight search occurences
+"set nohlsearch         " Disable highlight search occurences
 
-set makeprg=makegvim\ --directory=~/Projects/buildroot
+" Section: Keybinding {{{1
 
-" plugins bindings
-" deactivate indentation and other formatting stuff to prevent
-" shit from happening while pasting things
-map <F1> :!cscope -bRkq -I ../../_build/builderenv/dmos-services-l2/dmos-services-l2-test-valgrind/imported/target/include<CR>:!rm -f tags<CR>:!ctags -R --c-kinds=+p --fields=+S .<CR>:cs reset<CR>:TlistUpdate<CR>
+" Generate or update a cscope base including headers generated by dmtdd-platform
+map <F1> :!cscope -bRkq -I ../../_build/builderenv/`pwd \| xargs basename`/`pwd \| xargs basename`-test-valgrind/imported/target/include<CR>:!rm -f tags<CR>:!ctags -R --c-kinds=+p --fields=+S .<CR>:cs reset<CR>:TlistUpdate<CR>
+" Deactivate indentation and other formatting stuff to prevent shit from happening while
+" pasting things
 set pastetoggle=<F2>
+" Generate or update a cscope base
 map <F3> :!cscope -bRkq<CR>:!rm -f tags<CR>:!ctags -R --c-kinds=+p --fields=+S .<CR>:cs reset<CR>:TlistUpdate<CR>
+" Open/close Tag List
 map <F4> :TlistToggle<CR>
+" Open/close NERDTree navigator
 map <F5> :NERDTreeToggle<CR>
+" Comment a line
 map <F6> :s/^\(.*\)$/\/\/\1/g<CR>:nohlsearch<CR>
+" Un-comment a line
 map <F7> :s/^\/\///g<CR>:nohlsearch<CR>
+" Select a word
 map s bve
-map <C-g> :tn<CR>
-map <C-h> :tN<CR>
-map <C-f> :cs find f 
-map <C-e> :cs find e 
-map <C-k> :make
-map <C-Down> :cn<CR>
-map <C-Up> :cN<CR>
+" Select the entire buffer
 map <C-a> ggVG
-map <C-k> :pyf /usr/share/vim/addons/syntax/clang-format-3.5.py<CR>
-imap <C-k> <c-o>:pyf /usr/share/vim/addons/syntax/clang-format-3.5.py<CR>
+" Apply clang-format in the entire file
+map <C-k> :%pyf /usr/share/vim/addons/syntax/clang-format-3.5.py<CR>
+imap <C-k> <c-o>:%pyf /usr/share/vim/addons/syntax/clang-format-3.5.py<CR>
+" Instert a generic debug function at current line
+map <C-d> :call InsertDebugPrint()<CR>
+imap <C-d> <c-o>:call InsertDebugPrint()<CR>
+" Find occurrencys of debug function and remove them all
+map <C-e> :%g/^\(.*\)printf("\(.*\)## %s:%d - %s()\(.*\)$/d<CR>
+imap <C-e> <c-o>:%g/^\(.*\)printf("\(.*\)## %s:%d - %s()\(.*\)$/d<CR>
+" Alternate between header and source file
+map <TAB>a :A<CR>
 
-" plugin settings
+" Section: Cscope {{{2
+" Go to next occurence of cscope search
+map <C-g> :tn<CR>
+" Go to previous occurence of cscope search
+map <C-h> :tN<CR>
+" Starts a find for a file
+map <C-f> :cs find f 
+" Starts an egrep find with cscope
+map <C-e> :cs find e 
+
+" Mapping cscope to use quickfix
+"set cscopequickfix=s-,c-,d-,i-,t-,e-
+
+" Section: Plugin settings {{{1
+let g:bufExplorerUseCurrentWindow=1
+let tlist_d_settings='c++;d:macro;g:enum;s:struct;u:union;t:typedef;v:variable;f:function;c:class;T:template;p:abstract;X:mixin;m:member;M:module'
+let tlist_htmljinja_settings='html;a:anchor;f:javascript function'
+
+" Section: TagList {{{2
 let g:Tlist_Sort_Type='name'
 let g:Tlist_Auto_Highlight_Tag=1
 let g:Tlist_Display_Prototype=0
@@ -111,47 +184,76 @@ let g:Tlist_Show_One_File=1
 let g:Tlist_WinWidth=32
 let g:Tlist_Enable_Fold_Column=0
 
+" Section: NERDTree {{{2
 let g:NERDTreeShowBookmarks=1
 let g:NERDTreeChDirMode=0
 let g:NERDTreeWinSize=40
 let g:NERDTreeWinPos="left"
-let g:bufExplorerUseCurrentWindow=1
 
-let tlist_d_settings='c++;d:macro;g:enum;s:struct;u:union;t:typedef;v:variable;f:function;c:class;T:template;p:abstract;X:mixin;m:member;M:module'
-let tlist_htmljinja_settings='html;a:anchor;f:javascript function'
-
-" mapping cscope to quickfix
-"set cscopequickfix=s-,c-,d-,i-,t-,e-
-
-" misc stuff
-map <TAB>a :A<CR>
-map <TAB>n :tabn<CR>
-map <TAB>p :tabp<CR>
-"inoremap <SPACE><TAB> <TAB>
-
-" inoremapping, easen stuff
-" my latex stuff
-inoremap #document \documentclass[11pt]{article}<CR><CR>\usepackage[utf8]{inputenc}<CR>\usepackage[brazilian]{babel}<CR><CR>\title{}<CR>\author{}<CR>\date{}<CR>\begin{document}<CR>\maketitle<CR>\tableofcontents<CR>\abstract{}<CR><CR>\end{document}<UP>
-inoremap #itemize \begin{itemize}<CR>\item<SPACE><CR>\end{itemize}
-inoremap #list \begin{lstlisting}<CR>\end{lstlisting}
-
-" Doxygen Toolkit
+" Section: DoxygenToolkit {{{2
+" Doxygen Toolkit (Change this to "Your Name <your.email@somecompany.foo>")
 let g:DoxygenToolkit_authorName="Filipe Utzig <filipe.utzig@datacom.ind.br>"
 
-"good tab completion - press <tab> to autocomplete if there's a character
-""previously
-function InsertTabWrapper()
-      let col = col('.') - 1
-      if !col || getline('.')[col - 1] !~ '\k'
-          return "\<tab>"
-      else
-          return "\<c-p>"
-      endif
+" Section: Programming specific {{{1
+" Section: C/C++ {{{2
+
+" Where to load ctags file
+set tags=tags,../tags,../../tags,../../../tags
+set showfulltag         " Improve TAB completion in C/C++
+
+" Add Doxygen code highlight support for C/C++ files
+au BufNewFile,BufRead *.c,*.cc,*.cpp,*.h,*.hh,*.hpp set syntax=cpp.doxygen
+
+" Get username, format a debug printf() call, paste and indent
+function InsertDebugPrint()
+    let cursor = getpos('.')
+    let line = line('.')
+    let username = system("whoami")
+    let username = split(username, '\v\n')[0]
+    let str = join(["printf(\"", " ## %s:%d - %s()\\n\", __FILE__, __LINE__, __func__);"], username)
+    call append(line, str)
+    let cursor[1] = cursor[1] + 1
+    call setpos('.', cursor)
+    normal ==
 endfunction
 
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+" Before writing to C/C++/Python/Bash files, this function will remove any trailling space
+function! RemoveTrailingSpace()
+    let save_cursor = getpos(".")
+    :%s/\s*$//g
+    :'^
+    "`.
+    call setpos('.', save_cursor)
+endfunction
 
-command W w !sudo tee %
+autocmd BufWrite,FileWritePre
+\   *.c,*.cc,*.cpp,*.h,*.hh,*.hpp,*.py,*.sh
+\   call RemoveTrailingSpaces()
 
-" keep a single clipboard between all vim sessions
-set clipboard=unnamedplus
+" Before writing to C/C++ files, this function will remove any extra white lines end of a file
+function TrimEndLines()
+    let save_cursor = getpos(".")
+    :silent! %s#\($\n\s*\)\+\%$##
+    call setpos('.', save_cursor)
+endfunction
+
+autocmd BufWrite,FileWritePre *.c,*.cc,*.cpp,*.h,*.hh,*.hpp call TrimEndLines()
+
+" Before writing to C/C++ files, this function will format the file in clang-format defined
+" by user in $HOME/.clang-format
+function FormatClangStyle()
+    %pyf /usr/share/vim/addons/syntax/clang-format-3.5.py
+endfunction
+
+autocmd BufWritePost *.c,*.cc,*.cpp,*.h,*.hh,*.hpp call FormatClangStyle()
+
+" Section: Latex {{{2
+" Template for document header
+inoremap #document \documentclass[11pt]{article}<CR><CR>\usepackage[utf8]{inputenc}<CR>\usepackage[brazilian]{babel}<CR><CR>\title{}<CR>\author{}<CR>\date{}<CR>\begin{document}<CR>\maketitle<CR>\tableofcontents<CR>\abstract{}<CR><CR>\end{document}<UP>
+
+" Template for itemize
+inoremap #itemize \begin{itemize}<CR>\item<SPACE><CR>\end{itemize}
+
+" Template for lists
+inoremap #list \begin{lstlisting}<CR>\end{lstlisting}
+
