@@ -153,6 +153,8 @@ map <C-e> :%g/^\(.*\)printf("\(.*\)## %s:%d - %s()\(.*\)$/d<CR>
 imap <C-e> <c-o>:%g/^\(.*\)printf("\(.*\)## %s:%d - %s()\(.*\)$/d<CR>
 " Alternate between header and source file
 map <TAB>a :A<CR>
+" Open a Git Blame (or Shame?!) pane
+map gb :Gblame
 
 " Section: Cscope {{{2
 " Go to next occurence of cscope search
