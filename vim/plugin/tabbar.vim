@@ -291,7 +291,7 @@ endif "%%
 
 " g:Tb_MaxHeight maxSize ~~
 if !exists('g:Tb_MaxSize')
-      let g:Tb_MaxSize = 1
+      let g:Tb_MaxSize = 2
       "TODO implement Tb_MaxHeight
 endif "%%
 

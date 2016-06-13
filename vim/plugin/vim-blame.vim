@@ -31,6 +31,6 @@
    setlocal scrollbind
    syncbind
 :endfunction
-:map gb :call <SID>svnBlame()<CR>
+"":map gb :call <SID>svnBlame()<CR>
 :command Blame call s:svnBlame()
 
