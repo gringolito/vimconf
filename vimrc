@@ -197,8 +197,12 @@ let g:NERDTreeWinPos="left"
 let g:DoxygenToolkit_authorName="Filipe Utzig <filipe.utzig@datacom.ind.br>"
 
 " Section: Programming specific {{{1
+" Section: YouCompleteMe {{{2
+" Where to load YCM global config file
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+" Do not ask when opening an extra conf file
+let g:ycm_confirm_extra_conf = 0
 " Section: C/C++ {{{2
-
 " Where to load ctags file
 set tags=tags,../tags,../../tags,../../../tags
 set showfulltag         " Improve TAB completion in C/C++
