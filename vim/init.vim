@@ -14,16 +14,12 @@
 "
 " Section: Custom settings {{{1
 set nocompatible        " Became not compatible with Vi, required for the most of this vimrc
-set mouse=a             " Enable mouse use in: normal, visual, insert and command-line modes
 set title               " Change the window title to 'filename [++-] (path) - VIM'
 set ruler               " Display the cursos current position
-set history=5000        " Configure command history size
 set hidden              " Don't unload buffer on window close
 "set nohidden           " Unload buffer when window close, save a bit of memory, but is slower
 set splitright          " When spliting panel, the new one will be in right side
 set clipboard=unnamed   " Keep a single clipboard between all your vim sessions
-filetype on             " Enable filetype detection
-filetype plugin on      " Enable dynamic plugin loading based on filetype
 
 " Section: Code highlight and colorscheme {{{2
 if exists("syntax_on")
@@ -51,7 +47,6 @@ set spelllang=en_US     " Set spell language
 set tabstop=4           " Width (in spaces) that a <tab> is displayed as
 set softtabstop=4       " Makes spaces feel like tabs (like deleting)
 set shiftwidth=4        " Width (in spaces) used in each step of autoindent (aswell as << and >>)
-set autoindent          " Turn on auto-indenting (great for programers)
 set copyindent          " When auto-indenting, use the indenting format of the previous line
 set smartindent         " Does the right thing (mostly) in programs
 set cindent             " Stricter rules for C programs
@@ -62,19 +57,14 @@ set expandtab           " If you need to use spaces instead tabs
 " Enable block editing support (type Ctrl+V in normal-mode to start block selection)
 set virtualedit=block
 
-" Fix backspace to work over line breaks, automatically-inserted indentation, or the place
-" where insert mode started
-set backspace=indent,eol,start
-
 set number              " Show line numbers on left
 set cursorline          " Highlight current line
 "set nocursorline       " Disable current line highlighting
 set colorcolumn=100     " Set horizontal ruler indicator size (in columns)
 "set textwidth=100      " Automatic broke line after size (in columns)
 set list                " Show hidden characters like tabs and lost spaces
-set listchars=tab:▸\    " Whats gonna be shown instead of TABs
+set listchars+=tab:▸\    " Whats gonna be shown instead of TABs
 set listchars+=trail:·  " Whats gonna be shown instead of trailling spaces
-set wildmenu            " Improved command-line completion
 "set nowildmenu         " Disables improved command-line completion
 
 " Complete till longest common string and show a list of possible completions
@@ -115,11 +105,57 @@ autocmd BufReadPost *
 \   endif
 
 " Section: Searching {{{2
-set incsearch           " Search as I'm typing, like google - damn good
 set ignorecase          " Case insensitive searching
 "set noignorecase       " Case sensitive searching
-set hlsearch            " Highlight search occurences
 "set nohlsearch         " Disable highlight search occurences
+
+
+" Section: Plugin Handling {{{1
+" Install all plugins using vim-plug
+" vim-plug usage:
+"   PlugInstall [name ...]      Install plugins
+"   PlugUpdate [name ...]       Install or update plugins
+"   PlugClean[!]                Remove unused directories (bang version will clean without prompt)
+"   PlugUpgrade                 Upgrade vim-plug itself
+"   PlugStatus                  Check the status of plugins
+"   PlugDiff                    Examine changes from the previous update and the pending changes
+"   PlugSnapshot[!] [out path]  Generate script for restoring the current snapshot of the plugins
+
+call plug#begin('~/.config/nvim/plugged')
+" Make sure you use single quotes
+
+" Alternate Files quickly (.c --> .h etc) http://www.vim.org/scripts/script.php?script_id=31
+Plug 'vim-scripts/a.vim'
+" Function parameter complete, code snippets, and much more.
+"  http://www.vim.org/scripts/script.php?script_id=1764
+Plug 'vim-scripts/code_complete'
+" cscope keyboard mappings for VIM
+Plug 'chazy/cscope_maps'
+" Simplify Doxygen documentation in C, C++, Python.
+"  http://www.vim.org/scripts/script.php?script_id=987
+Plug 'vim-scripts/DoxygenToolkit.vim'
+" A tree explorer plugin for vim.
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" A plugin of NERDTree showing git status
+Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plugin to add tab bar (derived from miniBufExplorer)
+"  http://www.vim.org/scripts/script.php?script_id=1338
+Plug 'vim-scripts/TabBar'
+" Source code browser (supports C/C++, java, perl, python, tcl, sql, php, etc)
+"  http://www.vim.org/scripts/script.php?script_id=273
+Plug 'vim-scripts/taglist.vim'
+" Vim bookmark plugin http://www.vim.org/scripts/script.php?script_id=4893
+Plug 'MattesGroeger/vim-bookmarks'
+" Automatically offers word completion as you type
+"  http://www.vim.org/scripts/script.php?script_id=73
+Plug 'vim-scripts/word_complete.vim'
+" Generates config files for YouCompleteMe
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+" A code-completion engine for Vim
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+
+" Add plugins to &runtimepath
+call plug#end()
 
 " Section: Keybinding {{{1
 
@@ -202,6 +238,7 @@ let g:DoxygenToolkit_authorName="Filipe Utzig <filipe.utzig@datacom.ind.br>"
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 " Do not ask when opening an extra conf file
 let g:ycm_confirm_extra_conf = 0
+
 " Section: C/C++ {{{2
 " Where to load ctags file
 set tags=tags,../tags,../../tags,../../../tags
@@ -248,7 +285,7 @@ autocmd BufWrite,FileWritePre *.c,*.cc,*.cpp,*.h,*.hh,*.hpp call TrimEndLines()
 " Before writing to C/C++ files, this function will format the file in clang-format defined
 " by user in $HOME/.clang-format
 function! FormatClangStyle()
-    %pyf /usr/share/vim/addons/syntax/clang-format-3.8.py
+    %pyf /usr/share/vim/addons/syntax/clang-format-3.5.py
 endfunction
 
 " autocmd BufWrite,FileWritePre *.c,*.cc,*.cpp,*.h,*.hh,*.hpp call FormatClangStyle()
@@ -262,4 +299,36 @@ inoremap #itemize \begin{itemize}<CR>\item<SPACE><CR>\end{itemize}
 
 " Template for lists
 inoremap #list \begin{lstlisting}<CR>\end{lstlisting}
+
+" Section: GUI specific {{{1
+" Section: Code highlight and colorscheme {{{2
+" Fix syntax highlighting and set a colorscheme
+"if exists("syntax_on")
+"    syntax reset
+"endif
+"highlight clear
+colorscheme gringolito
+
+" Section: GUI Options {{{2
+" Set window size of GVim when opening a new window
+winsize 104 60
+
+" Section: Fullscreen support {{{2
+" Adds fullscreen support for GVim (mapped in F11)
+" This script needs wmctrl to work properly (apt install wmctrl)
+function! ToggleFlag(option,flag)
+    exec('let lopt = &' . a:option)
+    if lopt =~ (".*" . a:flag . ".*")
+        exec('set ' . a:option . '-=' . a:flag)
+    else
+        exec('set ' . a:option . '+=' . a:flag)
+    endif
+endfunction
+
+function! ToggleFullscreen()
+    exec ToggleFlag("guioptions","m")
+    exec system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
+endfunction
+
+map <silent> <F11> :call ToggleFullscreen()<CR>
 
