@@ -21,6 +21,13 @@ set hidden              " Don't unload buffer on window close
 set splitright          " When spliting panel, the new one will be in right side
 set clipboard=unnamed   " Keep a single clipboard between all your vim sessions
 
+" Remember things between sessions
+" '20  - remember marks for 20 previous files
+" <50 - save 50 lines for each register
+" :20  - remember 20 items in command-line history
+" %    - remember the buffer list (if vim started without a file arg)
+set shada='20,<50,:20,%,n~/.nviminfo
+
 " Section: Code highlight and colorscheme {{{2
 if exists("syntax_on")
   syntax reset
@@ -299,36 +306,4 @@ inoremap #itemize \begin{itemize}<CR>\item<SPACE><CR>\end{itemize}
 
 " Template for lists
 inoremap #list \begin{lstlisting}<CR>\end{lstlisting}
-
-" Section: GUI specific {{{1
-" Section: Code highlight and colorscheme {{{2
-" Fix syntax highlighting and set a colorscheme
-"if exists("syntax_on")
-"    syntax reset
-"endif
-"highlight clear
-colorscheme gringolito
-
-" Section: GUI Options {{{2
-" Set window size of GVim when opening a new window
-winsize 104 60
-
-" Section: Fullscreen support {{{2
-" Adds fullscreen support for GVim (mapped in F11)
-" This script needs wmctrl to work properly (apt install wmctrl)
-function! ToggleFlag(option,flag)
-    exec('let lopt = &' . a:option)
-    if lopt =~ (".*" . a:flag . ".*")
-        exec('set ' . a:option . '-=' . a:flag)
-    else
-        exec('set ' . a:option . '+=' . a:flag)
-    endif
-endfunction
-
-function! ToggleFullscreen()
-    exec ToggleFlag("guioptions","m")
-    exec system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
-endfunction
-
-map <silent> <F11> :call ToggleFullscreen()<CR>
 
