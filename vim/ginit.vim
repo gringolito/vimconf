@@ -39,8 +39,7 @@ function! ToggleFlag(option,flag)
 endfunction
 
 function! ToggleFullscreen()
-    exec ToggleFlag("guioptions","m")
-    exec system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
+    exec system("wmctrl -ir " . g:GuiWindowId . " -b toggle,fullscreen")
 endfunction
 
 map <silent> <F11> :call ToggleFullscreen()<CR>

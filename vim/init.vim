@@ -13,7 +13,6 @@
 " this stuff is worth it, you can buy me a beer in return.   Filipe Utzig
 "
 " Section: Custom settings {{{1
-set nocompatible        " Became not compatible with Vi, required for the most of this vimrc
 set title               " Change the window title to 'filename [++-] (path) - VIM'
 set ruler               " Display the cursos current position
 set hidden              " Don't unload buffer on window close
