@@ -16,7 +16,7 @@
 "if exists("syntax_on")
 "    syntax reset
 "endif
-"highlight clear
+highlight clear
 colorscheme gringolito
 
 " Section: GUI Options {{{1
@@ -42,9 +42,12 @@ function! ToggleFlag(option,flag)
     endif
 endfunction
 
+
 function! ToggleFullscreen()
     exec ToggleFlag("guioptions","m")
-    exec system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
+    if has("unix")
+        exec system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
+    endif
 endfunction
 
 map <silent> <F11> :call ToggleFullscreen()<CR>
