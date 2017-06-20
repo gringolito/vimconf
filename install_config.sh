@@ -18,7 +18,7 @@ fi
 
 # create simlinks for the current dir, so our configuration is updated
 # if its modified in the git repository
-ln -sf ${CURDIR}/vim/init.rc ~/.vimrc
+ln -sf ${CURDIR}/vim/init.vim ~/.vimrc
 ln -sf ${CURDIR}/gvimrc ~/.gvimrc
 ln -sf ${CURDIR}/vim ~/.vim
 ln -sf ${CURDIR}/vim ~/.config/nvim
