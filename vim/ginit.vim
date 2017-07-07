@@ -21,7 +21,7 @@ colorscheme gringolito
 
 " Section: GUI Options {{{1
 " Set font for neovim-qt
-GuiFont DejaVu Sans Mono:h10
+GuiFont Droid Sans Mono Dotted for Powerline:h10
 
 " Set window size of GVim when opening a new window
 " winsize 104 60
