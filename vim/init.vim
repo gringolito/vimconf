@@ -20,6 +20,7 @@ set hidden              " Don't unload buffer on window close
 set splitright          " When spliting panel, the new one will be in right side
 set clipboard=unnamed   " Keep a single clipboard between all your vim sessions
 set autowrite           " Automatically save before :next, :make etc.
+setglobal mouse=a
 
 " Remember things between sessions
 " '20  - remember marks for 20 previous files
@@ -36,8 +37,8 @@ if exists("syntax_on")
 endif
 syntax on
 highlight clear
-colorscheme devbox-dark-256
-set background=dark     " Use this if your colorscheme has a dark background
+colorscheme gringolito256
+"set background=dark     " Use this if your colorscheme has a dark background
 
 " Section: Language, spelling and enconding stuff {{{2
 " Set file enconding to UTF-8
@@ -172,7 +173,7 @@ Plug 'vim-scripts/word_complete.vim'
 " Generates config files for YouCompleteMe
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 " A code-completion engine for Vim
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang' }
 " lean & mean status/tabline for vim that's light as air
 Plug 'vim-airline/vim-airline'
 " A collection of themes for vim-airline
@@ -203,7 +204,7 @@ if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
 endif
 "Search and Replace
-nmap <Leader>s :%s//g<Left><Left>
+nmap <Leader>s :%s///g<Left><Left><Left>
 " Open file menu
 nnoremap <Leader>o :CtrlP<CR>
 " Open buffer menu
@@ -252,7 +253,8 @@ set cscopequickfix=s-,c-,d-,i-,t-,e-
 
 " Section: Plugin settings {{{1
 let g:bufExplorerUseCurrentWindow=1
-
+let g:Tb_MaxSize=2
+let g:NERDTreeMapMenu="<leader>m"
 " Section: airline {{{2
 let g:airline_powerline_fonts = 1
 "let g:airline#extensions#tabline#enabled = 2
@@ -276,7 +278,7 @@ let g:Tlist_Enable_Fold_Column=0
 " Section: NERDTree {{{2
 let g:NERDTreeShowBookmarks=1
 let g:NERDTreeChDirMode=0
-let g:NERDTreeWinSize=40
+let g:NERDTreeWinSize=28
 let g:NERDTreeWinPos="left"
 
 " Section: DoxygenToolkit {{{2
@@ -295,7 +297,7 @@ let g:DoxygenToolkit_blockTag = "\\name "
 let g:DoxygenToolkit_classTag = "\\class "
 let g:DoxygenToolkit_compactOneLineDoc = "yes"
 let g:DoxygenToolkit_compactDoc = "yes"
-
+let g:DoxygenToolkit_ignoreForReturn = ["void"]
 " Section: AutoPep8 {{{2
 " Do not fix these errors/warnings (default: E226,E24,W6)
 "let g:autopep8_ignore="E501,W293"
@@ -327,9 +329,9 @@ let g:autopep8_diff_type='vertical'
 " Section: Programming specific {{{1
 " Section: YouCompleteMe {{{2
 " Where to load YCM global config file
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+"let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 " Do not ask when opening an extra conf file
-let g:ycm_confirm_extra_conf = 0
+"let g:ycm_confirm_extra_conf = 0
 
 " Section: C/C++ {{{2
 
@@ -349,6 +351,8 @@ augroup c_cpp
     " Apply clang-format in the entire file
     autocmd FileType c,cpp,h map <C-k> :%pyf /usr/share/vim/addons/syntax/clang-format-3.5.py<CR>
     autocmd FileType c,cpp,h imap <C-k> <c-o>:%pyf /usr/share/vim/addons/syntax/clang-format-3.5.py<CR>
+    autocmd FileType c,cpp,h map <C-M-k> :%pyf /usr/share/vim/addons/syntax/clang-format-5.0.py<CR>
+    autocmd FileType c,cpp,h imap <C-M-k> <c-o>:%pyf /usr/share/vim/addons/syntax/clang-format-5.0.py<CR>
     " Instert a generic debug function at current line
     autocmd FileType c,cpp,h map <C-d> :call InsertDebugPrint()<CR>
     autocmd FileType c,cpp,h imap <C-d> <c-o>:call InsertDebugPrint()<CR>
@@ -356,6 +360,7 @@ augroup c_cpp
     autocmd FileType c,cpp,h map <C-e> :%g/^\(.*\)printf("\(.*\)## %s:%d - %s()\(.*\)$/d<CR>
     ")
     autocmd FileType c,cpp,h imap <C-e> <c-o>:%g/^\(.*\)printf("\(.*\)## %s:%d - %s()\(.*\)$/d<CR>
+    ")
 augroup END
 
 " Add Doxygen code highlight support for C/C++ files
@@ -402,6 +407,10 @@ function! FormatClangStyle()
     %pyf /usr/share/vim/addons/syntax/clang-format-3.5.py
 endfunction
 
+function! FormatClangStyleNew()
+    %pyf /usr/share/vim/addons/syntax/clang-format-5.0.py
+endfunction
+
 " autocmd BufWrite,FileWritePre *.c,*.cc,*.cpp,*.h,*.hh,*.hpp call FormatClangStyle()
 
 " Section: Go {{{2 
@@ -420,10 +429,6 @@ let g:go_highlight_generate_tags = 1
 let g:go_highlight_trailing_whitespace_error = 1
 let g:go_highlight_chan_whitespace_error = 1
 let g:go_highlight_array_whitespace_error = 1
-
-" Open :GoDeclsDir with ctrl-g
-nmap <C-g> :GoDeclsDir<cr>
-imap <C-g> <esc>:<C-u>GoDeclsDir<cr>
 
 augroup go
     autocmd!
@@ -452,6 +457,9 @@ augroup go
     autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
     autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
     autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+    " Open :GoDeclsDir with ctrl-g
+    autocmd FileType go nmap <C-g> :GoDeclsDir<cr>
+    autocmd FileType go imap <C-g> <esc>:<C-u>GoDeclsDir<cr>
 augroup END
 
 " build_go_files is a custom function that builds or compiles the test file.
